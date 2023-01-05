@@ -6,11 +6,11 @@ import com.wwt.stocktest.domain.StockRecord;
 import com.wwt.stocktest.mapper.StockMapper;
 import com.wwt.stocktest.mapper.StockRecordMapper;
 import com.wwt.stocktest.service.StockService;
+import com.wwt.stocktest.utils.RedisLockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author wwt
@@ -26,6 +26,9 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private StockRecordMapper stockRecordMapper;
+
+    @Autowired
+    private RedisLockUtil redisLockUtil;
 
 
     @Override
@@ -88,5 +91,20 @@ public class StockServiceImpl implements StockService {
         updateWrapper.setSql("stock = stock + 1");
         updateWrapper.eq("id",1);
         stockMapper.update(null, updateWrapper);
+    }
+
+    public void test(String productCode){
+        boolean isLock = redisLockUtil.tryLock(productCode);
+        if(!isLock){
+            return;
+        }
+        try {
+            //do thing
+        } finally {
+            //释放锁
+            redisLockUtil.unLock(productCode);
+        }
+
+
     }
 }
