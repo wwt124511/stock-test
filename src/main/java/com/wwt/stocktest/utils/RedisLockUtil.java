@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisLockUtil {
 
-    private String name;
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -66,10 +64,10 @@ public class RedisLockUtil {
 
     /**
      * @Author wwt
-     * @Description 释放锁
+     * @Description 释放锁 调用lua脚本
      * @Param
      * @Return
-     * @CreateTime 2022-12-19 11:23
+     * @CreateTime 2023-01-09 14:50
      */
     public void unLock(String lockKey) {
         //调用lua脚本
@@ -77,13 +75,6 @@ public class RedisLockUtil {
                 UNLOCK_SCRIPT,
                 Collections.singletonList(KEY_PRIFIX + lockKey),
                 UUID_PRIFIX + Thread.currentThread().getId());
-//        //获取当前线程标识id
-//        String threadId = UUID_PRIFIX + Thread.currentThread().getId();
-//        //获取锁中的标识
-//        String lockValue = stringRedisTemplate.opsForValue().get(KEY_PRIFIX + lockKey);
-//        if(threadId.equals(lockValue)){
-//            stringRedisTemplate.delete(KEY_PRIFIX + lockKey);
-//        }
     }
 
 

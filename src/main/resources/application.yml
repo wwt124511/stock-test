@@ -3,9 +3,23 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.37.244.12:4371/stock-test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://10.100.0.33:3306/stock-test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: jdkj7^YHN
+    password: root
+  redis:
+    host: 10.100.0.73
+    port: 8080
+    password: 2gbohredis
+    jedis:
+      pool:
+        #最大连接数
+        max-active: 128
+        #最大阻塞等待时间(负数表示没限制)
+        max-wait: 20000
+        #最大空闲
+        max-idle: 64
+        #最小空闲
+        min-idle: 10
 #mybatis-plus日志配置
 mybatis-plus:
   configuration:
